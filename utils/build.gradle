@@ -1,0 +1,40 @@
+import java.util.regex.Pattern
+
+apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+def groupId = "pl.openrnd.android"
+def artifactId = "utils"
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion "21.1.2"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 21
+        versionCode 2
+        versionName "1.0.1"
+    }
+
+    buildTypes {
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.google.android.gms:play-services:+'
+}
+
+task clearJar(type: Delete) {
+    delete 'build/outputs/utils.jar'
+}
+
+task makeJar(type: Copy) {
+    from('build/intermediates/bundles/release/')
+    into('build/outputs/')
+    include('classes.jar')
+    rename('classes.jar', 'utils.jar')
+}
+
+makeJar.dependsOn(clearJar, build)
